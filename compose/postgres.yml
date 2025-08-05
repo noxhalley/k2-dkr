@@ -1,0 +1,26 @@
+services:
+  esk-rdb:
+    image: postgres:17-alpine3.21
+    container_name: k2-pg
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "krake", "-d", "k2_pg_1"]
+    environment:
+      POSTGRES_DB: k2_pg_1
+      POSTGRES_USER: krake
+      POSTGRES_PASSWORD: 123456
+      MIGRATOR_INITIAL_PASSWORD: 123456
+    ports:
+      - 5433:5432
+    volumes:
+      - k2-pg-data:/var/lib/postgresql/data
+    networks:
+        - k2-pg
+
+volumes:
+  k2-pg-data:
+    name: k2-pg-data
+
+networks:
+  k2-pg:
+    driver: bridge
+    name: k2-pg
